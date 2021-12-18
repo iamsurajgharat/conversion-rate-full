@@ -1,0 +1,6 @@
+.metals/*
+main-service/project/metals.sbt
+main-service/project/.bloop/*
+main-service/project/project/*
+main-service/project/target/*
+main-service/target/*
