@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cr-main-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: cr-main-service
+  template:
+    metadata:
+      labels:
+        component: cr-main-service
+    spec:
+      containers:
+        - name: cr-main-service
+          image: surajgharat/conversion-rate-main-service
+          ports:
+            - containerPort: 9000
+          env:
+            - name: APPLICATION_SECRET
+              value: abcdefghijklmnopqrstuvwxyz
+            - name: DB_HOST
+              value: 'host.docker.internal'
+            - name: DB_PORT
+              value: '5433'
+            - name: DB_NAME
+              value: postgres
+            - name: DB_USER
+              value: postgres
+            - name: DB_PASSWORD
+              value: qwerty@1234

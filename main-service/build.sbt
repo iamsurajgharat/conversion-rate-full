@@ -3,9 +3,11 @@ organization := "com.surajgharat"
 
 version := "1.0-SNAPSHOT"
 
-lazy val databaseUrl = sys.env.getOrElse("DB_DEFAULT_URL", "jdbc:postgresql://localhost:5432/postgres")
-lazy val databaseUser = sys.env.getOrElse("DB_DEFAULT_USER", "postgres")
-lazy val databasePassword = sys.env.getOrElse("DB_DEFAULT_PASSWORD", "postgres")
+lazy val databaseHost = sys.env.getOrElse("DB_HOST", "localhost:5432")
+lazy val databaseName = sys.env.getOrElse("DB_NAME", "postgres")
+lazy val databaseUrl = s"jdbc:postgresql://$databaseHost/$databaseName"
+lazy val databaseUser = sys.env.getOrElse("DB_USER", "postgres")
+lazy val databasePassword = sys.env.getOrElse("DB_PASSWORD", "postgres")
 
 scalaVersion := "2.13.6"
 val FlywayVersion = "8.0.4"
@@ -44,7 +46,7 @@ dockerChmodType := DockerChmodType.UserGroupWriteExecute
 dockerPermissionStrategy := DockerPermissionStrategy.CopyChown
 
 Docker / maintainer := "mr.surajgharat2@gmail.com"
-Docker / packageName := "conversion-rate-service"
+Docker / packageName := "surajgharat/conversion-rate-main-service"
 Docker / version := sys.env.getOrElse("BUILD_NUMBER", "0")
 Docker / daemonUserUid := None
 Docker / daemonUser := "daemon"
