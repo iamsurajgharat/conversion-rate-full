@@ -16,6 +16,8 @@ import zio.ZIO
 
 import javax.inject._
 import scala.concurrent.Future
+import java.io.StringWriter
+import java.io.PrintWriter
 
 
 @Singleton
@@ -80,10 +82,18 @@ class ConversionRateController @Inject() (
     
     //private def interpret(effect: UIO[Result]):Result = zio.Runtime.default.unsafeRunTask(effect)
     private def handleInternalError(e:Throwable):Result = e match {
-        case _ : ValidationException => BadRequest(e.getMessage())
+        case _ : ValidationException => 
+            BadRequest(e.getMessage())
         case _ => 
-            //e.printStackTrace()
+            e.printStackTrace()
             InternalServerError(e.getMessage())
+    }
+
+    private def getStackTrace(ex:Throwable):String = {
+        val sw = new StringWriter()
+        val pw = new PrintWriter(sw)
+        ex.printStackTrace(pw)
+        sw.toString()
     }
 
     //import ai.x.play.json.Jsonx

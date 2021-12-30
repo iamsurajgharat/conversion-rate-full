@@ -8,6 +8,8 @@ import com.surajgharat.conversionrates.models._
 import org.joda.time.DateTime
 import scala.concurrent.Future
 import org.joda.time.DateTimeZone
+import com.typesafe.config.Config
+import com.typesafe.config.ConfigFactory
 
 object rateRepositoryLive {
     
@@ -21,6 +23,8 @@ object rateRepositoryLive {
         def getAllRates(): Task[List[SavedConversionRate]] = {
             ZIO.fromFuture(ec => {
                 val query = ratesFromDB.sortBy(_.id).result
+                val conf : Config = ConfigFactory.load();
+                println("dbconfig :"+conf.getString("mydb.properties.serverName"))
                 db.run(query).map(_.toList)
             });
         }

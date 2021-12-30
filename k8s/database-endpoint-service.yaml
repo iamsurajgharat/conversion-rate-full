@@ -1,0 +1,19 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: postgresql-service
+spec:
+  ports:
+    - port: 5433
+  
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: postgresql-service
+subsets:
+  - addresses:
+    - ip: 192.168.39.1
+    ports: 
+      - port: 5433
+

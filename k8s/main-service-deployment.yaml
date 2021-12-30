@@ -21,7 +21,7 @@ spec:
             - name: APPLICATION_SECRET
               value: abcdefghijklmnopqrstuvwxyz
             - name: DB_HOST
-              value: 'host.docker.internal'
+              value: 'postgresql-service'
             - name: DB_PORT
               value: '5433'
             - name: DB_NAME
@@ -29,4 +29,4 @@ spec:
             - name: DB_USER
               value: postgres
             - name: DB_PASSWORD
-              value: qwerty@1234
+              value: 'qwerty@1234'

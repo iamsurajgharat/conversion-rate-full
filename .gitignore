@@ -4,3 +4,6 @@ main-service/project/.bloop/*
 main-service/project/project/*
 main-service/project/target/*
 main-service/target/*
+main-service/.bloop/*
+main-service/.metals/*
+main-service/.vscode/*
