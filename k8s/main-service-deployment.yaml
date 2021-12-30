@@ -19,7 +19,10 @@ spec:
             - containerPort: 9000
           env:
             - name: APPLICATION_SECRET
-              value: abcdefghijklmnopqrstuvwxyz
+              valueFrom:
+                secretKeyRef:
+                  name: play-app-secret
+                  key: appkey
             - name: DB_HOST
               value: 'postgresql-service'
             - name: DB_PORT
@@ -27,6 +30,12 @@ spec:
             - name: DB_NAME
               value: postgres
             - name: DB_USER
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: database-creds
+                  key:  username
             - name: DB_PASSWORD
-              value: 'qwerty@1234'
+              valueFrom:
+                secretKeyRef:
+                  name: database-creds
+                  key:  password

@@ -6,3 +6,11 @@ How to make Postgresql running on host accessible to pods running inside minikub
 2. Update Postgresql client authetication settings to allow minikube pod app to connect to it, by changing pg_hba.conf. 
 
 3. For above both steps, we need to know host and minikube ip addresses for the bridge they are connected through.
+
+## Create kubernetes secret for database credentials
+
+kubectl create secret generic database-creds --from-literal=username=<dbusername> --from-literal=password=<dbpassword>
+
+## Create kubernetes secret for play-application secret
+
+kubectl create secret generic play-app-secret --from-literal=appsecret=<thesecret>
