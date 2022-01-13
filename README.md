@@ -13,4 +13,4 @@ kubectl create secret generic database-creds --from-literal=username=<dbusername
 
 ## Create kubernetes secret for play-application secret
 
-kubectl create secret generic play-app-secret --from-literal=appsecret=<thesecret>
+kubectl create secret generic play-app-secret --from-literal=appkey=<thesecret>

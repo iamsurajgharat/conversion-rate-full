@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cr-main-service-lb-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 9000
+  selector:
+    component: cr-main-service

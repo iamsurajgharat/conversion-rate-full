@@ -1,0 +1,16 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: postgresql-service
+spec:
+  ports:
+    - port: 5433
+  
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: postgresql-service
+subsets:
+  - addresses:
+    - ip: t1postgresql.postgres.database.azure.com

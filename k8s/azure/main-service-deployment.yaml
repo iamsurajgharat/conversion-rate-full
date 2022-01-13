@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cr-main-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: cr-main-service
+  template:
+    metadata:
+      labels:
+        component: cr-main-service
+    spec:
+      containers:
+        - name: cr-main-service
+          image: acrtest13.azurecr.io/conversion-rate-main-service:v1
+          ports:
+            - containerPort: 9000
+          env:
+            - name: APPLICATION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: play-app-secret
+                  key: appkey
+            - name: DB_HOST
+              value: 'postgresqltest11.postgres.database.azure.com'
+            - name: DB_PORT
+              value: '5432'
+            - name: DB_NAME
+              value: postgres
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: database-creds
+                  key:  username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-creds
+                  key:  password

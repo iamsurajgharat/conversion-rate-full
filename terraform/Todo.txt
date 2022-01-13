@@ -1,0 +1,8 @@
+0. Create resource group
+1. Create Azure container registry (ACR)
+2. Build project
+3. Create docker image
+4. push image to ACR
+5. Create Azure kubernetes cluster using AKS, and attach ACR to it
+6. Create Azure postgresql database
+7. Deploy service AKS with all right parameters
