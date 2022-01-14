@@ -1,31 +1,50 @@
-# provider
-terraform {
-  required_providers {
-    azurerm = {
-      source = "hashicorp/azurerm"
-      version = "2.91.0"
-    }
-  }
-}
-
-provider "azurerm" {
-  features {}
-}
-
 # Create a resource group
-resource "azurerm_resource_group" "cr-resource-group-1" {
-  name     = "cr-resources-group-1"
-  location = "Central India"
+resource "azurerm_resource_group" "rg" {
+  name     = var.resource_group_name
+  location = var.location
 
   tags = {
     environment = "cr-test"
   }
 }
 
-resource "azurerm_container_registry" "cracr1" {
-  name                = "cracr1"
-  resource_group_name = azurerm_resource_group.cr-resource-group-1.name
-  location            = azurerm_resource_group.cr-resource-group-1.location
+# create azure container registry
+resource "azurerm_container_registry" "acr" {
+  name                = var.acr_name
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = var.location
   sku                 = "Basic"
   admin_enabled       = false
+}
+
+# add image to the container registry
+resource "null_resource" "build-and-push-image" {
+  provisioner "local-exec" {
+    command = "az acr build --image conversion-rate-main-service:v12 --registry ${var.acr_name} --file ../../main-service/target/docker/stage/Dockerfile ../../main-service/target/docker/stage"
+  }
+
+  depends_on = [azurerm_container_registry.acr]
+}
+
+resource "azurerm_kubernetes_cluster" "aks" {
+  name                = var.cluster_name
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  dns_prefix          = var.cluster_name
+  default_node_pool {
+    name                = "system"
+    node_count          = var.system_node_count
+    vm_size             = "Standard_B4ms"
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+}
+
+resource "azurerm_role_assignment" "role_acrpull" {
+  scope                            = azurerm_container_registry.acr.id
+  role_definition_name             = "AcrPull"
+  principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity.0.object_id
+  skip_service_principal_aad_check = true
 }
