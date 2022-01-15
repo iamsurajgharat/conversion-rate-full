@@ -7,3 +7,4 @@ main-service/target/*
 main-service/.bloop/*
 main-service/.metals/*
 main-service/.vscode/*
+terraform/azure/terraform.tfstate.backup

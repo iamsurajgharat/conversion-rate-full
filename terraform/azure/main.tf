@@ -48,3 +48,31 @@ resource "azurerm_role_assignment" "role_acrpull" {
   principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity.0.object_id
   skip_service_principal_aad_check = true
 }
+
+# postgresql server
+resource "azurerm_postgresql_server" "postgresql" {
+  name                = "crpostgresqlserver1"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+
+  sku_name = "B_Gen5_2"
+
+  storage_mb                   = 5120
+  backup_retention_days        = 7
+  geo_redundant_backup_enabled = false
+  auto_grow_enabled            = false
+
+  administrator_login          = var.postgres_username
+  administrator_login_password = var.postgres_password
+  version                      = "11"
+  ssl_enforcement_enabled      = false
+}
+
+# Enable access from kubernetes services to the postgresql server
+resource "azurerm_postgresql_firewall_rule" "postgresfirewall" {
+  name                  = "allow-aks"
+  resource_group_name   = azurerm_resource_group.rg.name
+  server_name           = azurerm_postgresql_server.postgresql.name
+  start_ip_address      = "0.0.0.0"
+  end_ip_address        = "0.0.0.0"
+}

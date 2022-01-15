@@ -22,3 +22,18 @@ variable "acr_name" {
   type        = string
   description = "ACR name"
 }
+
+variable "postgres_username" {
+  type        = string
+  description = "Postgresql database username"
+}
+
+variable "postgres_password" {
+  type        = string
+  description = "Postgresql database password"
+}
+
+variable "app_secret" {
+  type        = string
+  description = "Play application secret"
+}
